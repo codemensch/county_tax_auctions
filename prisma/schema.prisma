@@ -1,0 +1,29 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model CountyAuction {
+  id              String        @id @default(cuid())
+  countyName      String
+  state           String
+  urlMain         String
+  urlTaxOffice    String
+  urlTaxOther     String?
+  phone           String?
+  email           String?
+  nextAuctionDate DateTime?
+  auctionFormat   AuctionFormat
+  notes           String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+enum AuctionFormat {
+  ONLINE
+  IN_PERSON
+}
