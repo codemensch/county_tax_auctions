@@ -2,6 +2,9 @@
   "name": "county-tax-auctions",
   "version": "0.1.0",
   "private": true,
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
@@ -9,9 +12,11 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@prisma/client": "^6.11.1",
+    "@faker-js/faker": "^9.9.0",
+    "@prisma/client": "^6.13.0",
     "bootstrap": "^5.3.7",
     "next": "15.3.5",
+    "prisma": "^6.13.0",
     "react": "^19.0.0",
     "react-bootstrap": "^2.10.10",
     "react-dom": "^19.0.0"
@@ -24,8 +29,8 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.3.5",
-    "prisma": "^6.11.1",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2"
   }
 }
