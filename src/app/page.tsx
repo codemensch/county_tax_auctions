@@ -21,18 +21,19 @@ export interface County {
 }
 
 export default function Home() {
-  const [counties, setCounties] = useState<County[]>([]);
+  // const [counties, setCounties] = useState<County[]>([]);
 
-  useEffect(() => {
-    fetch('/api/counties')
-      .then((res) => res.json())
-      .then((data) => setCounties(data));
-  }, []);
+  // useEffect(() => {
+  //   fetch('/api/counties')
+  //     .then((res) => res.json())
+  //     .then((data) => setCounties(data));
+  // }, []);
 
   return (
     <div className="container mt-5">
+      {/* counties={counties} */}
       <h1>County Tax Auctions</h1>
-      <CountyTable counties={counties} />
+      <CountyTable/>
     </div>
   );
 }
