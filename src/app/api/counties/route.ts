@@ -11,13 +11,17 @@ export async function GET(req: NextRequest) {
   const limit = parseInt(searchParams.get("limit") || "20", 10);
   const skip = (page - 1) * limit;
 
-  // Fetch paginated data
+  // Sorting
+  const sort = searchParams.get("sort") || "countyName";
+  const order = searchParams.get("order") === "desc" ? "desc" : "asc";
+
+  // Fetch data
   const counties = await prisma.countyAuction.findMany({
     skip,
     take: limit,
+    orderBy: { [sort]: order },
   });
 
-  // Total count for pagination
   const totalCount = await prisma.countyAuction.count();
 
   return NextResponse.json({
