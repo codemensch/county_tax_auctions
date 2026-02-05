@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaxAuction Hub - Database</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #fafafa;
+            color: #242424;
+        }
+        
+        /* Header */
+        .header {
+            background: white;
+            border-bottom: 1px solid #e6e6e6;
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #242424;
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+        }
+        
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: #242424;
+            color: white;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 16px;
+        }
+        
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+        
+        .user-menu:hover {
+            background: #f5f5f5;
+        }
+        
+        .avatar {
+            width: 32px;
+            height: 32px;
+            background: #242424;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .user-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: #242424;
+        }
+        
+        /* Main Content */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 32px;
+        }
+        
+        .page-header {
+            margin-bottom: 32px;
+        }
+        
+        .page-header h1 {
+            font-size: 28px;
+            font-weight: 600;
+            color: #242424;
+            margin-bottom: 8px;
+            letter-spacing: -0.3px;
+        }
+        
+        .page-header p {
+            font-size: 15px;
+            color: #6b6b6b;
+        }
+        
+        /* Filters */
+        .filters {
+            background: white;
+            border: 1px solid #e6e6e6;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        
+        .filters-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+        
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .filter-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #525252;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .filter-select {
+            padding: 10px 12px;
+            border: 1px solid #d4d4d4;
+            border-radius: 6px;
+            font-size: 14px;
+            color: #242424;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .filter-select:hover {
+            border-color: #a3a3a3;
+        }
+        
+        .filter-select:focus {
+            outline: none;
+            border-color: #242424;
+            box-shadow: 0 0 0 3px rgba(36, 36, 36, 0.05);
+        }
+        
+        .clear-filters {
+            padding: 10px 16px;
+            background: transparent;
+            color: #6b6b6b;
+            border: 1px solid #d4d4d4;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            align-self: flex-end;
+        }
+        
+        .clear-filters:hover {
+            background: #fafafa;
+            color: #525252;
+        }
+        
+        /* Table Container */
+        .table-container {
+            background: white;
+            border: 1px solid #e6e6e6;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 24px;
+            border-bottom: 1px solid #e6e6e6;
+        }
+        
+        .results-count {
+            font-size: 14px;
+            color: #6b6b6b;
+        }
+        
+        .results-count strong {
+            color: #242424;
+            font-weight: 600;
+        }
+        
+        .table-actions {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .density-toggle {
+            padding: 6px 12px;
+            background: #f5f5f5;
+            border: none;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #525252;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .density-toggle:hover {
+            background: #e6e6e6;
+        }
+        
+        /* Table */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .data-table thead {
+            background: #fafafa;
+            position: sticky;
+            top: 72px;
+            z-index: 10;
+        }
+        
+        .data-table th {
+            text-align: left;
+            padding: 14px 24px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #525252;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid #e6e6e6;
+            white-space: nowrap;
+        }
+        
+        .data-table th:first-child {
+            width: 40px;
+        }
+        
+        .sortable {
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .sortable:hover {
+            color: #242424;
+        }
+        
+        .data-table tbody tr {
+            border-bottom: 1px solid #e6e6e6;
+            transition: background 0.15s;
+        }
+        
+        .data-table tbody tr:hover {
+            background: #fafafa;
+        }
+        
+        .data-table tbody tr.expanded {
+            background: #f5f5f5;
+        }
+        
+        .data-table td {
+            padding: 16px 24px;
+            font-size: 14px;
+            color: #404040;
+        }
+        
+        .expand-btn {
+            width: 24px;
+            height: 24px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6b6b6b;
+            transition: all 0.2s;
+            border-radius: 4px;
+        }
+        
+        .expand-btn:hover {
+            background: #e6e6e6;
+            color: #404040;
+        }
+        
+        .expand-icon {
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 6px solid currentColor;
+            transform: rotate(-90deg);
+            transition: transform 0.2s;
+        }
+        
+        tr.expanded .expand-icon {
+            transform: rotate(0deg);
+        }
+        
+        .county-name {
+            font-weight: 600;
+            color: #242424;
+        }
+        
+        .state {
+            color: #6b6b6b;
+            font-size: 13px;
+        }
+        
+        .url-link {
+            color: #242424;
+            text-decoration: none;
+            transition: all 0.2s;
+            border-bottom: 1px solid #d4d4d4;
+        }
+        
+        .url-link:hover {
+            border-bottom-color: #242424;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .badge-online {
+            background: #f5f5f5;
+            color: #242424;
+        }
+        
+        .badge-in-person {
+            background: #e6e6e6;
+            color: #404040;
+        }
+        
+        /* Expanded Row */
+        .expanded-content {
+            display: none;
+        }
+        
+        tr.expanded + .expanded-content {
+            display: table-row;
+        }
+        
+        .expanded-content td {
+            padding: 0;
+            background: #fafafa;
+        }
+        
+        .expanded-inner {
+            padding: 24px;
+            border-top: 1px solid #e6e6e6;
+        }
+        
+        .expanded-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+        
+        .detail-section {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .detail-section h4 {
+            font-size: 13px;
+            font-weight: 700;
+            color: #525252;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+        
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .detail-label {
+            font-size: 12px;
+            color: #6b6b6b;
+            font-weight: 500;
+        }
+        
+        .detail-value {
+            font-size: 14px;
+            color: #242424;
+        }
+        
+        .notes-section {
+            grid-column: 1 / -1;
+            padding-top: 12px;
+            border-top: 1px solid #e6e6e6;
+        }
+        
+        .notes-section h4 {
+            font-size: 13px;
+            font-weight: 700;
+            color: #525252;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+        
+        .notes-content {
+            font-size: 14px;
+            color: #525252;
+            line-height: 1.6;
+            background: white;
+            padding: 12px;
+            border-radius: 4px;
+            border: 1px solid #e6e6e6;
+        }
+        
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 24px;
+            border-top: 1px solid #e6e6e6;
+        }
+        
+        .rows-per-page {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #6b6b6b;
+        }
+        
+        .rows-per-page select {
+            padding: 6px 10px;
+            border: 1px solid #d4d4d4;
+            border-radius: 4px;
+            font-size: 14px;
+            background: white;
+            cursor: pointer;
+        }
+        
+        .page-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .page-info {
+            font-size: 14px;
+            color: #6b6b6b;
+        }
+        
+        .page-btn {
+            padding: 8px 12px;
+            background: white;
+            border: 1px solid #d4d4d4;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #525252;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .page-btn:hover:not(:disabled) {
+            background: #fafafa;
+            border-color: #a3a3a3;
+        }
+        
+        .page-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">TA</div>
+            <span>TaxAuction Hub</span>
+        </div>
+        <div class="header-right">
+            <div class="user-menu">
+                <div class="avatar">JD</div>
+                <span class="user-name">John Doe</span>
+            </div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="page-header">
+            <h1>County Tax Auction Database</h1>
+            <p>Search and filter property tax auctions across all US counties</p>
+        </div>
+        
+        <div class="filters">
+            <div class="filters-row">
+                <div class="filter-group">
+                    <label class="filter-label">State</label>
+                    <select class="filter-select">
+                        <option>All States</option>
+                        <option>Alabama</option>
+                        <option>Alaska</option>
+                        <option>Arizona</option>
+                        <option selected>Tennessee</option>
+                        <option>Texas</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label class="filter-label">County</label>
+                    <select class="filter-select">
+                        <option>All Counties</option>
+                        <option>Davidson County</option>
+                        <option>Knox County</option>
+                        <option>Shelby County</option>
+                        <option>Williamson County</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label class="filter-label">Auction Format</label>
+                    <select class="filter-select">
+                        <option>All Formats</option>
+                        <option>Online</option>
+                        <option>In-Person</option>
+                        <option>Hybrid</option>
+                    </select>
+                </div>
+                
+                <button class="clear-filters">Clear Filters</button>
+            </div>
+        </div>
+        
+        <div class="table-container">
+            <div class="table-header">
+                <div class="results-count">
+                    Showing <strong>95</strong> of <strong>3,143</strong> counties
+                </div>
+                <div class="table-actions">
+                    <button class="density-toggle">Compact View</button>
+                </div>
+            </div>
+            
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th class="sortable">County</th>
+                        <th class="sortable">State</th>
+                        <th class="sortable">Website</th>
+                        <th class="sortable">Contact</th>
+                        <th class="sortable">Auction Format</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="expanded">
+                        <td>
+                            <button class="expand-btn">
+                                <div class="expand-icon"></div>
+                            </button>
+                        </td>
+                        <td>
+                            <div class="county-name">Davidson County</div>
+                        </td>
+                        <td>
+                            <div class="state">Tennessee</div>
+                        </td>
+                        <td>
+                            <a href="#" class="url-link">nashville.gov/tax-sales</a>
+                        </td>
+                        <td>
+                            <div>(615) 862-6520</div>
+                            <div style="font-size: 12px; color: #64748b;">taxsales@nashville.gov</div>
+                        </td>
+                        <td>
+                            <span class="badge badge-online">Online</span>
+                        </td>
+                    </tr>
+                    
+                    <tr class="expanded-content">
+                        <td colspan="6">
+                            <div class="expanded-inner">
+                                <div class="expanded-grid">
+                                    <div class="detail-section">
+                                        <h4>Additional Information</h4>
+                                        <div class="detail-item">
+                                            <span class="detail-label">Auction Frequency</span>
+                                            <span class="detail-value">Quarterly</span>
+                                        </div>
+                                        <div class="detail-item">
+                                            <span class="detail-label">Next Auction Date</span>
+                                            <span class="detail-value">March 15, 2026</span>
+                                        </div>
+                                        <div class="detail-item">
+                                            <span class="detail-label">Registration Deadline</span>
+                                            <span class="detail-value">March 8, 2026</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="detail-section">
+                                        <h4>Third Party Platforms</h4>
+                                        <div class="detail-item">
+                                            <span class="detail-label">Bid4Assets</span>
+                                            <a href="#" class="url-link">bid4assets.com/davidson-tn</a>
+                                        </div>
+                                        <div class="detail-item">
+                                            <span class="detail-label">Realauction</span>
+                                            <a href="#" class="url-link">realauction.com/tn-davidson</a>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="notes-section">
+                                        <h4>Notes</h4>
+                                        <div class="notes-content">
+                                            Davidson County conducts tax deed sales online through their proprietary platform. All properties must be paid in full within 48 hours of winning bid. County requires bidder registration 7 days prior to auction. Physical inspection of properties is available during posted business hours.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td>
+                            <button class="expand-btn">
+                                <div class="expand-icon"></div>
+                            </button>
+                        </td>
+                        <td>
+                            <div class="county-name">Knox County</div>
+                        </td>
+                        <td>
+                            <div class="state">Tennessee</div>
+                        </td>
+                        <td>
+                            <a href="#" class="url-link">knoxcounty.org/trustee</a>
+                        </td>
+                        <td>
+                            <div>(865) 215-2005</div>
+                            <div style="font-size: 12px; color: #64748b;">trustee@knoxcounty.org</div>
+                        </td>
+                        <td>
+                            <span class="badge badge-in-person">In-Person</span>
+                        </td>
+                    </tr>
+                    
+                    <tr class="expanded-content">
+                        <td colspan="6"></td>
+                    </tr>
+                    
+                    <tr>
+                        <td>
+                            <button class="expand-btn">
+                                <div class="expand-icon"></div>
+                            </button>
+                        </td>
+                        <td>
+                            <div class="county-name">Shelby County</div>
+                        </td>
+                        <td>
+                            <div class="state">Tennessee</div>
+                        </td>
+                        <td>
+                            <a href="#" class="url-link">shelbycountytn.gov/tax</a>
+                        </td>
+                        <td>
+                            <div>(901) 222-2222</div>
+                            <div style="font-size: 12px; color: #64748b;">taxinfo@shelby.tn.us</div>
+                        </td>
+                        <td>
+                            <span class="badge badge-online">Online</span>
+                        </td>
+                    </tr>
+                    
+                    <tr class="expanded-content">
+                        <td colspan="6"></td>
+                    </tr>
+                    
+                    <tr>
+                        <td>
+                            <button class="expand-btn">
+                                <div class="expand-icon"></div>
+                            </button>
+                        </td>
+                        <td>
+                            <div class="county-name">Williamson County</div>
+                        </td>
+                        <td>
+                            <div class="state">Tennessee</div>
+                        </td>
+                        <td>
+                            <a href="#" class="url-link">williamsoncounty-tn.gov</a>
+                        </td>
+                        <td>
+                            <div>(615) 790-5709</div>
+                            <div style="font-size: 12px; color: #64748b;">trustee@williamsoncounty.us</div>
+                        </td>
+                        <td>
+                            <span class="badge badge-in-person">In-Person</span>
+                        </td>
+                    </tr>
+                    
+                    <tr class="expanded-content">
+                        <td colspan="6"></td>
+                    </tr>
+                    
+                    <tr>
+                        <td>
+                            <button class="expand-btn">
+                                <div class="expand-icon"></div>
+                            </button>
+                        </td>
+                        <td>
+                            <div class="county-name">Montgomery County</div>
+                        </td>
+                        <td>
+                            <div class="state">Tennessee</div>
+                        </td>
+                        <td>
+                            <a href="#" class="url-link">mcgtn.org/trustee</a>
+                        </td>
+                        <td>
+                            <div>(931) 648-5711</div>
+                            <div style="font-size: 12px; color: #64748b;">trustee@mcgtn.org</div>
+                        </td>
+                        <td>
+                            <span class="badge badge-online">Online</span>
+                        </td>
+                    </tr>
+                    
+                    <tr class="expanded-content">
+                        <td colspan="6"></td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="pagination">
+                <div class="rows-per-page">
+                    <span>Rows per page:</span>
+                    <select>
+                        <option>25</option>
+                        <option selected>50</option>
+                        <option>100</option>
+                    </select>
+                </div>
+                
+                <div class="page-controls">
+                    <span class="page-info">1-50 of 95</span>
+                    <button class="page-btn" disabled>Previous</button>
+                    <button class="page-btn">Next</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

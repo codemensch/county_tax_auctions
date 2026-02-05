@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaxAuction Hub - Edit Profile</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #fafafa;
+            color: #242424;
+        }
+        
+        /* Header */
+        .header {
+            background: white;
+            border-bottom: 1px solid #e6e6e6;
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #242424;
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+        }
+        
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: #242424;
+            color: white;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 32px;
+        }
+        
+        .nav-link {
+            color: #6b6b6b;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        
+        .nav-link:hover {
+            color: #242424;
+        }
+        
+        .nav-link.active {
+            color: #242424;
+        }
+        
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+        
+        .user-menu:hover {
+            background: #f5f5f5;
+        }
+        
+        .avatar {
+            width: 32px;
+            height: 32px;
+            background: #242424;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .user-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: #242424;
+        }
+        
+        /* Main Content */
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 48px 32px;
+        }
+        
+        .page-header {
+            margin-bottom: 40px;
+        }
+        
+        .page-header h1 {
+            font-size: 32px;
+            font-weight: 600;
+            color: #242424;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+        
+        .page-header p {
+            font-size: 16px;
+            color: #6b6b6b;
+            line-height: 1.6;
+        }
+        
+        /* Form Card */
+        .form-card {
+            background: white;
+            border: 1px solid #e6e6e6;
+            border-radius: 8px;
+            padding: 40px;
+            margin-bottom: 24px;
+        }
+        
+        .form-section {
+            margin-bottom: 40px;
+        }
+        
+        .form-section:last-of-type {
+            margin-bottom: 0;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #242424;
+            margin-bottom: 20px;
+            letter-spacing: -0.3px;
+        }
+        
+        .form-group {
+            margin-bottom: 24px;
+        }
+        
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #242424;
+            margin-bottom: 8px;
+        }
+        
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #d4d4d4;
+            border-radius: 6px;
+            font-size: 15px;
+            color: #242424;
+            background: white;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        
+        .form-input:hover,
+        .form-select:hover,
+        .form-textarea:hover {
+            border-color: #a3a3a3;
+        }
+        
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: #242424;
+            box-shadow: 0 0 0 3px rgba(36, 36, 36, 0.05);
+        }
+        
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .form-help {
+            font-size: 13px;
+            color: #6b6b6b;
+            margin-top: 6px;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+        
+        /* Avatar Upload */
+        .avatar-upload {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+        
+        .avatar-large {
+            width: 80px;
+            height: 80px;
+            background: #242424;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 28px;
+        }
+        
+        .avatar-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .btn-text {
+            background: none;
+            border: none;
+            color: #242424;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 0;
+            text-decoration: underline;
+            transition: opacity 0.2s;
+        }
+        
+        .btn-text:hover {
+            opacity: 0.7;
+        }
+        
+        .btn-text.danger {
+            color: #dc2626;
+        }
+        
+        /* Buttons */
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            padding-top: 32px;
+            border-top: 1px solid #e6e6e6;
+            margin-top: 32px;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+        
+        .btn-primary {
+            background: #242424;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #000000;
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: #242424;
+            border: 1px solid #d4d4d4;
+        }
+        
+        .btn-secondary:hover {
+            background: #fafafa;
+            border-color: #a3a3a3;
+        }
+        
+        /* Divider */
+        .divider {
+            height: 1px;
+            background: #e6e6e6;
+            margin: 32px 0;
+        }
+        
+        /* Delete Section */
+        .danger-section {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            border-radius: 8px;
+            padding: 24px;
+        }
+        
+        .danger-section h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #dc2626;
+            margin-bottom: 8px;
+        }
+        
+        .danger-section p {
+            font-size: 14px;
+            color: #991b1b;
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+        
+        .btn-danger {
+            background: #dc2626;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+        
+        .btn-danger:hover {
+            background: #b91c1c;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">TA</div>
+            <span>TaxAuction Hub</span>
+        </div>
+        <nav class="nav-links">
+            <a href="#" class="nav-link">Database</a>
+            <a href="#" class="nav-link active">Profile</a>
+        </nav>
+        <div class="header-right">
+            <div class="user-menu">
+                <div class="avatar">JD</div>
+                <span class="user-name">John Doe</span>
+            </div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="page-header">
+            <h1>Edit Profile</h1>
+            <p>Update your personal information and account settings</p>
+        </div>
+        
+        <div class="form-card">
+            <form>
+                <div class="form-section">
+                    <div class="section-title">Profile Photo</div>
+                    <div class="avatar-upload">
+                        <div class="avatar-large">JD</div>
+                        <div class="avatar-actions">
+                            <button type="button" class="btn-text">Upload new photo</button>
+                            <button type="button" class="btn-text danger">Remove photo</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="divider"></div>
+                
+                <div class="form-section">
+                    <div class="section-title">Personal Information</div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">First Name</label>
+                            <input type="text" class="form-input" value="John" placeholder="Enter first name">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Last Name</label>
+                            <input type="text" class="form-input" value="Doe" placeholder="Enter last name">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" class="form-input" value="john.doe@example.com" placeholder="Enter email address">
+                        <div class="form-help">We'll use this email for account notifications and updates</div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Phone Number</label>
+                            <input type="tel" class="form-input" value="(615) 555-0123" placeholder="(000) 000-0000">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Location</label>
+                            <input type="text" class="form-input" value="Nashville, TN" placeholder="City, State">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="divider"></div>
+                
+                <div class="form-section">
+                    <div class="section-title">Investment Profile</div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Primary Investment Focus</label>
+                        <select class="form-select">
+                            <option>Tax Liens</option>
+                            <option selected>Tax Deeds</option>
+                            <option>Both</option>
+                            <option>Research Only</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Target States</label>
+                        <input type="text" class="form-input" value="Tennessee, Georgia, Alabama" placeholder="Enter states of interest">
+                        <div class="form-help">Separate multiple states with commas</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Notes</label>
+                        <textarea class="form-textarea" placeholder="Add any additional notes about your investment strategy or preferences...">Primarily interested in residential properties in urban areas. Focus on online auctions for convenience.</textarea>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <button type="button" class="btn btn-secondary">Cancel</button>
+                </div>
+            </form>
+        </div>
+        
+        <div class="danger-section">
+            <h3>Delete Account</h3>
+            <p>Once you delete your account, there is no going back. All your saved searches, preferences, and data will be permanently removed.</p>
+            <button class="btn-danger">Delete My Account</button>
+        </div>
+    </div>
+</body>
+</html>

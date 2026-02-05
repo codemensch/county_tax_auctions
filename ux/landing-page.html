@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaxAuction Hub - Landing Page</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            color: #1a1a1a;
+        }
+        
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(135deg, rgba(36, 36, 36, 0.95) 0%, rgba(60, 60, 60, 0.92) 100%),
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><rect fill="%23525252" width="1200" height="800"/><g opacity="0.08"><rect x="0" y="0" width="400" height="267" fill="%23fff"/><rect x="400" y="267" width="400" height="266" fill="%23fff"/><rect x="800" y="533" width="400" height="267" fill="%23fff"/></g></svg>');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .nav {
+            padding: 24px 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: white;
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #242424;
+            font-weight: 800;
+        }
+        
+        .auth-buttons {
+            display: flex;
+            gap: 16px;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .btn-primary {
+            background: white;
+            color: #242424;
+        }
+        
+        .btn-primary:hover {
+            background: #f5f5f5;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .hero-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 48px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .hero-content h1 {
+            font-size: 56px;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 24px;
+            line-height: 1.1;
+        }
+        
+        .hero-content p {
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 40px;
+            line-height: 1.6;
+            max-width: 700px;
+        }
+        
+        .cta-button {
+            padding: 18px 48px;
+            font-size: 18px;
+            background: white;
+            color: #242424;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(0, 0, 0, 0.3);
+            background: #f5f5f5;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+            margin-top: 80px;
+            max-width: 1000px;
+        }
+        
+        .feature {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 32px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            color: #242424;
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .feature h3 {
+            color: white;
+            font-size: 18px;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+        
+        .feature p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <nav class="nav">
+            <div class="logo">
+                <div class="logo-icon">TA</div>
+                <span>TaxAuction Hub</span>
+            </div>
+            <div class="auth-buttons">
+                <button class="btn btn-secondary">Log In</button>
+                <button class="btn btn-primary">Sign Up</button>
+            </div>
+        </nav>
+        
+        <div class="hero-content">
+            <h1>Your Central Hub for Tax Auction Intelligence</h1>
+            <p>Access comprehensive, up-to-date information on property tax auctions across every county in the United States. Research, plan, and stay informed—all in one place.</p>
+            <button class="cta-button">Get Started Free</button>
+            
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">🗺️</div>
+                    <h3>Complete Coverage</h3>
+                    <p>Information on tax auctions for every county in all 50 states</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🔍</div>
+                    <h3>Advanced Filtering</h3>
+                    <p>Search and filter by state, county, auction format, and more</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Always Current</h3>
+                    <p>AI-powered updates keep auction information accurate and fresh</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
