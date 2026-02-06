@@ -30,10 +30,8 @@ export default function Home() {
   // }, []);
 
   return (
-    <div className="container mt-5">
-      {/* counties={counties} */}
-      <h1>County Tax Auctions</h1>
+    <>
       <CountyTable/>
-    </div>
+    </>
   );
 }

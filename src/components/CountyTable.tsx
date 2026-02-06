@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState, Fragment } from "react";
 import { CountyAuction } from "@prisma/client";
+import { US_STATES, getStateCode } from "@/lib/us-states";
 
 export default function Counties() {
   const [counties, setCounties] = useState<CountyAuction[]>([]);
@@ -17,16 +18,18 @@ export default function Counties() {
     county: "",
     auctionFormat: "",
   });
-  const [compactView, setCompactView] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
+      // Convert full state name to code for API
+      const stateCode = filters.state ? getStateCode(filters.state) : undefined;
+
       const params = new URLSearchParams({
         page: pagination.page.toString(),
         limit: pagination.limit.toString(),
         sort: sortConfig.field,
         order: sortConfig.order,
-        ...(filters.state && { state: filters.state }),
+        ...(stateCode && { state: stateCode }),
         ...(filters.county && { county: filters.county }),
         ...(filters.auctionFormat && { auctionFormat: filters.auctionFormat }),
       });
@@ -110,7 +113,7 @@ export default function Counties() {
       </header>
 
       {/* Main Content */}
-      <div className="max-w-[1400px] mx-auto px-8 py-8">
+      <div className="px-8 py-8">
         {/* Page Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-semibold text-neutral-900 mb-2 tracking-tight">
@@ -134,11 +137,11 @@ export default function Counties() {
                 onChange={(e) => setFilters({ ...filters, state: e.target.value })}
               >
                 <option value="">All States</option>
-                <option value="Alabama">Alabama</option>
-                <option value="Alaska">Alaska</option>
-                <option value="Arizona">Arizona</option>
-                <option value="Tennessee">Tennessee</option>
-                <option value="Texas">Texas</option>
+                {US_STATES.map((state) => (
+                  <option key={state.code} value={state.name}>
+                    {state.name}
+                  </option>
+                ))}
               </select>
             </div>
 
@@ -147,9 +150,10 @@ export default function Counties() {
                 County
               </label>
               <select
-                className="px-3 py-2.5 border border-neutral-300 rounded-md text-sm text-neutral-900 bg-white cursor-pointer transition-all hover:border-neutral-400 focus:outline-none focus:border-neutral-900 focus:ring-[3px] focus:ring-neutral-900/5"
+                className="px-3 py-2.5 border border-neutral-300 rounded-md text-sm text-neutral-900 bg-white cursor-pointer transition-all hover:border-neutral-400 focus:outline-none focus:border-neutral-900 focus:ring-[3px] focus:ring-neutral-900/5 disabled:bg-neutral-100 disabled:text-neutral-400 disabled:cursor-not-allowed disabled:border-neutral-200"
                 value={filters.county}
                 onChange={(e) => setFilters({ ...filters, county: e.target.value })}
+                disabled={!filters.state}
               >
                 <option value="">All Counties</option>
               </select>
@@ -187,14 +191,6 @@ export default function Counties() {
             <div className="text-sm text-neutral-600">
               Showing <strong className="text-neutral-900 font-semibold">{endIndex}</strong> of{" "}
               <strong className="text-neutral-900 font-semibold">{pagination.total}</strong> counties
-            </div>
-            <div className="flex gap-3">
-              <button
-                className="px-3 py-1.5 bg-neutral-100 border-none rounded text-xs font-medium text-neutral-700 cursor-pointer transition-all hover:bg-neutral-200"
-                onClick={() => setCompactView(!compactView)}
-              >
-                {compactView ? "Normal View" : "Compact View"}
-              </button>
             </div>
           </div>
 
@@ -238,7 +234,7 @@ export default function Counties() {
                         expandedRows.has(county.id) ? "bg-neutral-100" : ""
                       }`}
                     >
-                      <td className={compactView ? "px-6 py-2" : "px-6 py-4"}>
+                      <td className="px-6 py-4">
                         <button
                           className="w-6 h-6 bg-transparent border-none cursor-pointer flex items-center justify-center text-neutral-600 transition-all rounded hover:bg-neutral-200 hover:text-neutral-700"
                           onClick={() => toggleRowExpansion(county.id)}
@@ -250,13 +246,13 @@ export default function Counties() {
                           />
                         </button>
                       </td>
-                      <td className={compactView ? "px-6 py-2 text-sm text-neutral-700" : "px-6 py-4 text-sm text-neutral-700"}>
+                      <td className="px-6 py-4 text-sm text-neutral-700">
                         <div className="font-semibold text-neutral-900">{county.countyName}</div>
                       </td>
-                      <td className={compactView ? "px-6 py-2 text-sm text-neutral-700" : "px-6 py-4 text-sm text-neutral-700"}>
+                      <td className="px-6 py-4 text-sm text-neutral-700">
                         <div className="text-neutral-600 text-xs">{county.state}</div>
                       </td>
-                      <td className={compactView ? "px-6 py-2 text-sm text-neutral-700" : "px-6 py-4 text-sm text-neutral-700"}>
+                      <td className="px-6 py-4 text-sm text-neutral-700">
                         {county.urlMain && (
                           <a
                             href={county.urlMain}
@@ -268,13 +264,13 @@ export default function Counties() {
                           </a>
                         )}
                       </td>
-                      <td className={compactView ? "px-6 py-2 text-sm text-neutral-700" : "px-6 py-4 text-sm text-neutral-700"}>
+                      <td className="px-6 py-4 text-sm text-neutral-700">
                         <div>{county.phone}</div>
                         {county.email && (
                           <div className="text-xs text-neutral-500">{county.email}</div>
                         )}
                       </td>
-                      <td className={compactView ? "px-6 py-2 text-sm text-neutral-700" : "px-6 py-4 text-sm text-neutral-700"}>
+                      <td className="px-6 py-4 text-sm text-neutral-700">
                         <span className={getBadgeClasses(county.auctionFormat)}>
                           {county.auctionFormat}
                         </span>
